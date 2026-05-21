@@ -22,6 +22,20 @@ A valid solution is a complete final Modelica model that passes OpenModelica che
 | public_demo | public | format inspection and smoke testing |
 | hidden_official_v0.1 | private | official aggregate evaluation |
 
+## Task Sources
+
+The public demo split contains standalone Modelica tasks only. The hidden official set is broader and includes standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries.
+
+## Difficulty Buckets
+
+Difficulty is assigned by empirical agent performance and workflow complexity, not by source-code length alone.
+
+| bucket | intended meaning |
+| --- | --- |
+| easy | Localized repair and basic OpenModelica workflow completion. |
+| medium | Requires more Modelica context, cross-equation consistency, or nontrivial parameter/interface reasoning. |
+| hard | Requires deeper workflow search, larger model context, library interaction, simulation-stage debugging, or robust finalization behavior. |
+
 ## Hidden Official Set
 
 The hidden v0.1 set contains 132 tasks:

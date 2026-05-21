@@ -1,0 +1,25 @@
+{
+  "task_id": "demo_004",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.1-preview",
+  "split": "public_demo",
+  "task_type": "modelica_repair",
+  "difficulty": "medium",
+  "model_name": "HydroTurbineGov_v0",
+  "workflow_goal": "Repair this Modelica model so that it passes OpenModelica checkModel and simulation while preserving the declared public model interface.",
+  "initial_model": "model HydroTurbineGov_v0\n  // Standalone hydro turbine governor DAE model with explicit equations.\n  // Inspired by HYGOV/IEEEG3 structure. No library dependencies.\n\n  // Governor parameters\n  parameter Real R    = 0.05   \"permanent droop\";\n  parameter Real r    = 0.30   \"temporary droop\";\n  parameter Real Tr   = 5.0    \"reset time constant\";\n  parameter Real Tf   = 0.05   \"pilot valve servo time constant\";\n  parameter Real Tg   = 0.5    \"main gate servo time constant\";\n  parameter Real GMAX = 1.0    \"maximum gate opening\";\n  parameter Real GMIN = 0.0    \"minimum gate opening\";\n  parameter Real At   = 1.2    \"turbine gain\";\n  parameter Real Dturb = 0.5   \"turbine damping\";\n  parameter Real Tw   = 1.5    \"water starting time\";\n  parameter Real qNL  = 0.08   \"no-load flow\";\n\n  // System frequency reference\n  parameter Real omega0 = 1.0  \"rated angular frequency (per unit)\";\n\n  // Inputs (fixed for standalone)\n  parameter Real PMECH0_set = 0.80  \"initial mechanical power\";\n  parameter Real SPEED_set  = \"1.00\" \"rotor speed input\";\n\n  // State variables\n  Real G(start = 0.80)    \"gate opening\";\n  Real GV(start = 0.80)   \"gate velocity state\";\n  Real x_r(start = 0.04)  \"temporary droop state\";\n  Real q(start = 0.72)    \"turbine water flow\";\n  Real PMECH(start = 0.80) \"mechanical power output\";\n\n  // Algebraic variables\n  Real SPEED    \"rotor speed input\";\n  Real PMECH0   \"mechanical power reference\";\n  Real omega_err \"speed error\";\n  Real P_ref    \"power reference from droop\";\n  Real q_nl     \"no-load flow offset\";\n  Real P_mech_raw \"raw mechanical power before damping\";\n\nequation\n  // Drive inputs from parameters\n  SPEED  = SPEED_set;\n  PMECH0 = PMECH0_set;\n\n  // Speed error\n  omega_err = omega0 - SPEED;\n\n  // Power reference via droop\n  P_ref = PMECH0 + omega_err / R;\n\n  // Governor servo: gate velocity\n  der(GV) = (P_ref - x_r - G) / Tf;\n\n  // Temporary droop feedback\n  der(x_r) = (r / Tr) * (GV - x_r / r);\n\n  // Gate servo\n  der(G) = GV / Tg;\n\n  // Water flow dynamics (penstock)\n  q_nl = qNL;\n  der(q) = (G - q - q_nl) / Tw;\n\n  // Raw turbine power\n  P_mech_raw = At * (q - q_nl);\n\n  // Mechanical power with speed damping\n  PMECH = P_mech_raw - Dturb * (SPEED - omega0);\n\n  annotation(experiment(StartTime=0, StopTime=30.0, Interval=0.05, Tolerance=1e-6));\nend HydroTurbineGov_v0;\n",
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 20,
+      "stop_time": 1.0
+    }
+  },
+  "acceptance": [
+    "The final model must be complete Modelica source code.",
+    "OpenModelica checkModel(model_name) must pass.",
+    "OpenModelica simulate(model_name) must pass with the specified stop_time and intervals.",
+    "The declared top-level model name and public interface should be preserved unless a change is required for validity."
+  ]
+}

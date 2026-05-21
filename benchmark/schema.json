@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Modelica Agent Workflow Benchmark Task",
+  "type": "object",
+  "required": [
+    "task_id",
+    "benchmark",
+    "benchmark_version",
+    "split",
+    "task_type",
+    "difficulty",
+    "model_name",
+    "workflow_goal",
+    "initial_model",
+    "verification",
+    "acceptance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "benchmark": {
+      "const": "Modelica Agent Workflow Benchmark"
+    },
+    "benchmark_version": {
+      "type": "string"
+    },
+    "split": {
+      "enum": [
+        "public_demo",
+        "hidden_official_v0.1"
+      ]
+    },
+    "task_type": {
+      "enum": [
+        "modelica_repair"
+      ]
+    },
+    "difficulty": {
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ]
+    },
+    "model_name": {
+      "type": "string"
+    },
+    "workflow_goal": {
+      "type": "string"
+    },
+    "initial_model": {
+      "type": "string"
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "tool",
+        "check_model",
+        "simulate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tool": {
+          "const": "OpenModelica"
+        },
+        "check_model": {
+          "type": "boolean"
+        },
+        "simulate": {
+          "type": "object",
+          "required": [
+            "stop_time",
+            "intervals"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "stop_time": {
+              "type": "number"
+            },
+            "intervals": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "task_id": "demo_003",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.1-preview",
+  "split": "public_demo",
+  "task_type": "modelica_repair",
+  "difficulty": "medium",
+  "model_name": "SyncMachineSimplified_v0",
+  "workflow_goal": "Repair this Modelica model so that it passes OpenModelica checkModel and simulation while preserving the declared public model interface.",
+  "initial_model": "model SyncMachineSimplified_v0\n  // Simplified synchronous machine DAE model (standalone, no library deps).\n  // Inspired by GENROE structure; all port/outer dependencies removed.\n  // Equations written explicitly for standalone workflow validation.\n\n  // Time constants\n  parameter Real Tpd0  = \"5.0\" \"d-axis transient open-circuit time constant\";\n  parameter Real Tpq0  = 1.5   \"q-axis transient open-circuit time constant\";\n  parameter Real Tppd0 = 0.05  \"d-axis sub-transient open-circuit time constant\";\n  parameter Real Tppq0 = 0.09  \"q-axis sub-transient open-circuit time constant\";\n\n  // Reactances\n  parameter Real Xd   = 1.81  \"d-axis synchronous reactance\";\n  parameter Real Xpd  = 0.30  \"d-axis transient reactance\";\n  parameter Real Xppd = 0.23  \"d-axis sub-transient reactance\";\n  parameter Real Xq   = 1.76  \"q-axis synchronous reactance\";\n  parameter Real Xpq  = 0.65  \"q-axis transient reactance\";\n  parameter Real Xppq = 0.25  \"q-axis sub-transient reactance\";\n  parameter Real Xl   = 0.15  \"leakage reactance\";\n  parameter Real R_a  = 0.005 \"armature resistance\";\n\n  // Derived constants\n  parameter Real K3d = (Xppd - Xl) / (Xpd - Xl);\n  parameter Real K4d = (Xpd - Xppd) / (Xpd - Xl);\n  parameter Real K3q = (Xppq - Xl) / (Xpq - Xl);\n  parameter Real K4q = (Xpq - Xppq) / (Xpq - Xl);\n\n  // Inputs (fixed for standalone simulation)\n  parameter Real EFD_set  = 1.45 \"field voltage\";\n  parameter Real id_set   = 0.12 \"d-axis current\";\n  parameter Real iq_set   = 0.85 \"q-axis current\";\n\n  // State variables\n  Real Epq(start = 1.20)  \"q-axis transient EMF\";\n  Real Epd(start = 0.05)  \"d-axis transient EMF\";\n  Real PSIkd(start = 0.90) \"d-axis damper flux linkage\";\n  Real PSIkq(start = 0.02) \"q-axis damper flux linkage\";\n\n  // Algebraic variables\n  Real PSIppd  \"d-axis sub-transient flux\";\n  Real PSIppq  \"q-axis sub-transient flux\";\n  Real PSIpp   \"air-gap sub-transient flux magnitude\";\n  Real PSId    \"d-axis stator flux\";\n  Real PSIq    \"q-axis stator flux\";\n  Real XadIfd  \"d-axis magnetizing current\";\n  Real XaqIlq  \"q-axis magnetizing current\";\n  Real EFD     \"field voltage (driven by parameter)\";\n  Real id      \"d-axis current (driven by parameter)\";\n  Real iq      \"q-axis current (driven by parameter)\";\n\nequation\n  // Drive inputs from parameters\n  EFD = EFD_set;\n  id  = id_set;\n  iq  = iq_set;\n\n  // Differential equations\n  der(Epq) = (1 / Tpd0) * (EFD - XadIfd);\n  der(Epd) = (1 / Tpq0) * (-XaqIlq);\n  der(PSIkd) = (1 / Tppd0) * (Epq - PSIkd - (Xpd - Xl) * id);\n  der(PSIkq) = (1 / Tppq0) * (Epd - PSIkq + (Xpq - Xl) * iq);\n\n  // Sub-transient flux linkages\n  PSIppd = Epq * K3d + PSIkd * K4d;\n  PSIppq = Epd * K3q + PSIkq * K4q;\n  PSIpp  = sqrt(PSIppd * PSIppd + PSIppq * PSIppq);\n\n  // Stator flux linkages\n  PSId = PSIppd - Xppd * id;\n  PSIq = -PSIppq - Xppq * iq;\n\n  // Magnetizing currents\n  XadIfd = Epq + id * (Xd - Xpd);\n  XaqIlq = -Epd + iq * (Xq - Xpq);\n\n  annotation(experiment(StartTime=0, StopTime=10.0, Interval=0.01, Tolerance=1e-6));\nend SyncMachineSimplified_v0;\n",
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 20,
+      "stop_time": 1.0
+    }
+  },
+  "acceptance": [
+    "The final model must be complete Modelica source code.",
+    "OpenModelica checkModel(model_name) must pass.",
+    "OpenModelica simulate(model_name) must pass with the specified stop_time and intervals.",
+    "The declared top-level model name and public interface should be preserved unless a change is required for validity."
+  ]
+}

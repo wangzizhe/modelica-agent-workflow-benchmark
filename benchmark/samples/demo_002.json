@@ -1,0 +1,25 @@
+{
+  "task_id": "demo_002",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.1-preview",
+  "split": "public_demo",
+  "task_type": "modelica_repair",
+  "difficulty": "easy",
+  "model_name": "ExciterAVR_v0",
+  "workflow_goal": "Repair this Modelica model so that it passes OpenModelica checkModel and simulation while preserving the declared public model interface.",
+  "initial_model": "model ExciterAVR_v0\n  // Standalone exciter + AVR DAE model with explicit equations.\n  // Inspired by IEEE Type-II excitation system structure.\n  // No library dependencies; all state and algebraic variables written explicitly.\n\n  // Exciter parameters\n  parameter Real KA   = 200.0  \"voltage regulator gain\";\n  parameter Real TA   = 0.06   \"voltage regulator time constant\";\n  parameter Real KE   = 1.0    \"exciter constant\";\n  parameter Real TE   = 0.46   \"exciter time constant\";\n  parameter Real KF   = 0.08   \"stabilizing feedback gain\";\n  parameter Real TF1  = 1.0    \"feedback time constant 1\";\n  parameter Real TF2  = 0.04   \"feedback time constant 2\";\n  parameter Real TR   = 0.02   \"voltage measurement time constant\";\n  parameter Real VRMAX =  7.3  \"maximum regulator output\";\n  parameter Real VRMIN = -7.3  \"minimum regulator output\";\n\n  // Saturation parameters\n  parameter Real SE1  = \"0.0039\" \"saturation at E1\";\n  parameter Real SE2  = 0.0274 \"saturation at E2\";\n  parameter Real E1   = 3.1    \"saturation breakpoint 1\";\n  parameter Real E2   = 4.18   \"saturation breakpoint 2\";\n\n  // Reference / input\n  parameter Real VREF = 1.05   \"reference voltage setpoint\";\n  parameter Real ETERM_set = 1.02 \"terminal voltage (input)\";\n\n  // State variables\n  Real VR(start = 1.20)    \"voltage regulator state\";\n  Real EFD(start = 1.50)   \"field voltage output\";\n  Real RF(start = 0.08)    \"feedback filter state\";\n  Real VM(start = 1.02)    \"measured terminal voltage\";\n\n  // Algebraic variables\n  Real ETERM    \"terminal voltage input\";\n  Real VERR     \"voltage error signal\";\n  Real SE_EFD   \"exciter saturation value\";\n\nequation\n  // Drive input from parameter\n  ETERM = ETERM_set;\n\n  // Voltage measurement lag\n  der(VM) = (ETERM - VM) / TR;\n\n  // Voltage error\n  VERR = VREF - VM - (KF / TF1) * RF;\n\n  // Exciter saturation (piecewise linear approximation)\n  SE_EFD = SE1 + (SE2 - SE1) / (E2 - E1) * (EFD - E1);\n\n  // Voltage regulator\n  der(VR) = (KA * VERR - VR) / TA;\n\n  // Exciter dynamics\n  der(EFD) = (VR - (KE + SE_EFD) * EFD) / TE;\n\n  // Feedback filter\n  der(RF) = (KF / TF1 * der(EFD) - RF) / TF2;\n\n  annotation(experiment(StartTime=0, StopTime=5.0, Interval=0.005, Tolerance=1e-6));\nend ExciterAVR_v0;\n",
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 20,
+      "stop_time": 1.0
+    }
+  },
+  "acceptance": [
+    "The final model must be complete Modelica source code.",
+    "OpenModelica checkModel(model_name) must pass.",
+    "OpenModelica simulate(model_name) must pass with the specified stop_time and intervals.",
+    "The declared top-level model name and public interface should be preserved unless a change is required for validity."
+  ]
+}

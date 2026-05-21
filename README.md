@@ -134,6 +134,14 @@ The benchmark supports three public submission interfaces:
 
 See `benchmark/submission.md` for the full submission spec.
 
+## Official Evaluation Access
+
+The public demo split can be run locally for format checks, tooling smoke tests, and submission preparation. It is not an official leaderboard split.
+
+For the v0.1 Preview, the 132-task hidden official set is evaluated through maintainer-run official evaluation. Participants may provide a prediction JSONL file, an agent command, or a Docker image following `benchmark/submission.md`. The maintainers run the controlled evaluator and return a public-safe aggregate report.
+
+The hidden tasks, hidden-set keys, and evaluator backend are not distributed. This protects the benchmark from leakage and training-data contamination.
+
 ## Hidden Evaluation Policy
 
 The official 132-task set is kept private. Aggregate results may be published, but hidden task contents and construction metadata are not released. This protects the benchmark from rapid training-data contamination.

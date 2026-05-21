@@ -28,7 +28,7 @@ A simulation is accepted when it completes cleanly. A warning status is accepted
 
 ## Task Sources
 
-The public demo split contains standalone Modelica tasks only. The hidden official set is broader and includes standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries.
+The public demo split contains standalone Modelica tasks only. The hidden official set is broader and includes standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM.
 
 ## Difficulty Buckets
 
@@ -50,7 +50,7 @@ The hidden v0.1 set contains 132 tasks:
 | medium | 56 |
 | hard | 55 |
 
-The hidden set includes Modelica Standard Library, public Modelica libraries, and standalone Modelica examples. Full task contents are not public.
+The hidden set includes Modelica Standard Library, public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM, and standalone Modelica examples. Full task contents are not public.
 
 ## Non-Goals
 

@@ -32,7 +32,7 @@ Warnings remain FAIL when they correspond to fatal solver errors, missing result
 
 The public demo split is intentionally small and self-contained. All four public demo tasks are standalone Modelica models with no external library dependency.
 
-The hidden official set is broader. It contains standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries. The full hidden task contents and construction metadata are not released.
+The hidden official set is broader. It contains standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM. The full hidden task contents and construction metadata are not released.
 
 | split | visibility | dependency types | purpose |
 | --- | --- | --- | --- |

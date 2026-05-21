@@ -19,7 +19,8 @@
   "acceptance": [
     "The final model must be complete Modelica source code.",
     "OpenModelica checkModel(model_name) must pass.",
-    "OpenModelica simulate(model_name) must pass with the specified stop_time and intervals.",
+    "OpenModelica simulate(model_name) must reach an accepted simulation status with the specified stop_time, intervals, and warning policy.",
+    "Accepted warning-pass status requires a non-empty result file and successful simulation completion; fatal warnings remain failures.",
     "The declared top-level model name and public interface should be preserved unless a change is required for validity."
   ]
 }

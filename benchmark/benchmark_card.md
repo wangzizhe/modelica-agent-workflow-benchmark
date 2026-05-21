@@ -13,7 +13,11 @@ Each task contains:
 - the target top-level model name;
 - OpenModelica verification settings.
 
-A valid solution is a complete final Modelica model that passes OpenModelica checkModel and simulation under the task settings.
+A valid solution is a complete final Modelica model that passes OpenModelica checkModel and reaches an accepted simulation status under the task settings.
+
+## Simulation Warning Policy
+
+A simulation is accepted when it completes cleanly. A warning status is accepted only when OpenModelica produces a non-empty result file and reports successful simulation completion. Fatal solver errors, missing result files, failed initialization, division by zero, integrator failure, or incomplete simulation output remain FAIL.
 
 ## Splits
 

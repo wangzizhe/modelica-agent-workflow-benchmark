@@ -20,7 +20,13 @@ Each task is a JSON file with:
 
 The canonical demo task files live in `benchmark/samples/*.json`. For easier reading, the same initial models are mirrored as `.mo` files in `benchmark/samples/modelica/`.
 
-A valid submission is a complete final Modelica model that passes OpenModelica `checkModel` and `simulate` under the task settings.
+A valid submission is a complete final Modelica model that passes OpenModelica `checkModel` and reaches an accepted simulation status under the task settings.
+
+## Simulation Warning Policy
+
+A clean OpenModelica simulation pass is accepted. A non-fatal warning status is also accepted only when OpenModelica produces a non-empty result file and reports that the simulation finished successfully.
+
+Warnings remain FAIL when they correspond to fatal solver errors, missing result files, failed initialization, division by zero, integrator failure, or any simulation output that does not successfully complete.
 
 ## Task Sources and Dependencies
 
@@ -111,7 +117,7 @@ Validate a submission JSON against a task JSON:
 python3 scripts/score_submission.py benchmark/samples/demo_001.json path/to/submission.json
 ```
 
-The scoring script checks schema-level requirements only. Official scoring runs OpenModelica checkModel and simulate using the task verification settings.
+The scoring script checks schema-level requirements only. Official scoring runs OpenModelica checkModel and simulation using the task verification settings and warning policy.
 
 ## Hidden Evaluation Policy
 

@@ -36,6 +36,8 @@ Optional compatibility fields:
 
 The evaluator runs the command in a fresh workspace for each task. The command receives the current task and writes a submission file.
 
+The task JSON contains only the agent-visible task fields: task id, workflow goal, model name, initial model, verification settings, and optional constraints/acceptance notes. It does not include hidden-set provenance, source metadata, construction metadata, or other private evaluator fields.
+
 Environment variables:
 
 | variable | meaning |

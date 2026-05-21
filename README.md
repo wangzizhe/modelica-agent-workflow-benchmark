@@ -75,6 +75,10 @@ The scoring script checks schema-level requirements only. Official scoring runs 
 
 The official 132-task set is kept private. Aggregate results may be published, but hidden task contents and construction metadata are not released. This protects the benchmark from rapid training-data contamination.
 
+## License
+
+Code, scripts, schemas, and tooling are licensed under the Apache License 2.0. Benchmark task data and task content are governed by `DATA_LICENSE.md` and may not be used for model training, fine-tuning, distillation, dataset augmentation, or benchmark memorization without prior written permission.
+
 ## Data Use Notice
 
 The public demo tasks are provided for benchmark format inspection and local smoke testing. They are not intended for training or benchmark memorization.

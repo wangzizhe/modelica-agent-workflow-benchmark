@@ -69,6 +69,10 @@ All agents were evaluated on the same 132-task hidden set under the same benchma
 
 *Reported tokens are runner-reported estimates; GateForge records provider usage directly, while other runners may omit local context management, compression, retries, or tool-output handling costs.
 
+## Evaluation Isolation
+
+Official evaluation runs each task in a fresh agent session and isolated workspace. Agents must not carry conversation history, scratchpads, repaired candidates, task observations, or tool state from one task to another. Read-only infrastructure caches, such as container images and Modelica library caches, may be reused when they do not expose task content.
+
 ## Public Demo Tasks
 
 | task | difficulty | dependency | model | task JSON | readable model |
@@ -87,6 +91,7 @@ benchmark/
   benchmark_card.md
   schema.json
   scoring.md
+  submission.md
   samples/
     demo_001.json
     demo_002.json
@@ -118,6 +123,16 @@ python3 scripts/score_submission.py benchmark/samples/demo_001.json path/to/subm
 ```
 
 The scoring script checks schema-level requirements only. Official scoring runs OpenModelica checkModel and simulation using the task verification settings and warning policy.
+
+## Submission Interfaces
+
+The benchmark supports three public submission interfaces:
+
+- `prediction_jsonl`: submit precomputed final Modelica models;
+- `agent_command`: run an agent command in one fresh workspace per task;
+- `agent_docker_image`: run a containerized agent with only the current task workspace mounted.
+
+See `benchmark/submission.md` for the full submission spec.
 
 ## Hidden Evaluation Policy
 

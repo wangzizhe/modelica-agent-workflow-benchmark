@@ -21,7 +21,15 @@ The following remain FAIL:
 - integrator failure;
 - simulation output without a successful completion message.
 
+## Evaluation Isolation
+
+Official scoring assumes one fresh agent session per task. Cross-task memory, shared conversation context, shared scratchpads, reused candidate repairs, or task-content caches are not allowed. Reusable read-only infrastructure caches are allowed only when they do not contain task-specific content.
+
 For v0.1 Preview, the public scoring script performs schema-level validation only. Official hidden-set scoring is run with OpenModelica.
+
+## Submission Interfaces
+
+Submission formats are documented in `benchmark/submission.md`. Official evaluation may run either precomputed predictions or an agent executable, but each task is still scored by the same OpenModelica acceptance policy.
 
 ## Submission Format
 

@@ -11,7 +11,6 @@
     "difficulty",
     "model_name",
     "workflow_goal",
-    "initial_model",
     "verification",
     "acceptance"
   ],
@@ -29,12 +28,14 @@
     "split": {
       "enum": [
         "public_demo",
-        "hidden_official_v0.1"
+        "hidden_official_v0.1",
+        "hidden_official_v0.2"
       ]
     },
     "task_type": {
       "enum": [
-        "modelica_repair"
+        "model_repair",
+        "model_generation"
       ]
     },
     "difficulty": {
@@ -52,6 +53,13 @@
     },
     "initial_model": {
       "type": "string"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
     },
     "verification": {
       "type": "object",
@@ -94,5 +102,51 @@
       },
       "minItems": 1
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "task_type": {
+            "const": "model_repair"
+          }
+        },
+        "required": [
+          "task_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "initial_model"
+        ],
+        "not": {
+          "required": [
+            "requirements"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "task_type": {
+            "const": "model_generation"
+          }
+        },
+        "required": [
+          "task_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "requirements"
+        ],
+        "not": {
+          "required": [
+            "initial_model"
+          ]
+        }
+      }
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 # Notice
 
-Modelica Agent Workflow Benchmark v0.1 Preview
+Modelica Agent Workflow Benchmark v0.2 Preview
 
 This repository uses separate licensing for code and benchmark task data:
 
@@ -9,4 +9,4 @@ This repository uses separate licensing for code and benchmark task data:
 
 The public demo tasks are provided for benchmark format inspection and local smoke testing. They are not intended for model training, benchmark memorization, or broad leaderboard claims.
 
-The official 132-task v0.1 evaluation set is hidden and is not distributed in this repository.
+Official hidden evaluation sets are not distributed in this repository.

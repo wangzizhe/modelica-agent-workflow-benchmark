@@ -1,17 +1,19 @@
-# Benchmark Card: Modelica Agent Workflow Benchmark v0.1 Preview
+# Benchmark Card: Modelica Agent Workflow Benchmark v0.2 Preview
 
 ## Purpose
 
-The Modelica Agent Workflow Benchmark evaluates AI agents on executable Modelica engineering workflows. The v0.1 Preview focuses on repair-style tasks where an agent receives a faulty Modelica model and must produce a valid final Modelica model.
+The Modelica Agent Workflow Benchmark evaluates AI agents on executable Modelica engineering workflows. The v0.2 Preview covers both repair-style tasks and generation-style tasks.
+
+## Workflow Families
+
+| workflow family | agent input | expected output |
+| --- | --- | --- |
+| Model Repair | a faulty complete Modelica model | a repaired complete Modelica model |
+| Model Generation | requirements for a new Modelica model | a generated complete Modelica model |
 
 ## Evaluation Object
 
-Each task contains:
-
-- a workflow goal;
-- a complete initial Modelica model;
-- the target top-level model name;
-- OpenModelica verification settings.
+Each task contains a workflow goal, a target top-level model name, OpenModelica verification settings, and either an `initial_model` for repair tasks or `requirements` for generation tasks.
 
 A valid solution is a complete final Modelica model that passes OpenModelica checkModel and reaches an accepted simulation status under the task settings.
 
@@ -25,18 +27,21 @@ Official evaluation runs each task in a fresh agent session and isolated workspa
 
 ## Submission Interfaces
 
-The public submission interfaces are documented in `benchmark/submission.md`. The v0.1 Preview supports prediction JSONL, local agent command, and Docker image submission formats.
+The public submission interfaces are documented in `benchmark/submission.md`. The v0.2 Preview supports prediction JSONL, local agent command, and Docker image submission formats.
 
 ## Splits
 
 | split | visibility | purpose |
 | --- | --- | --- |
 | public_demo | public | format inspection and smoke testing |
-| hidden_official_v0.1 | private | official aggregate evaluation |
+| hidden_official_v0.1 | private | official repair evaluation |
+| hidden_official_v0.2 | private | official workflow evaluation |
+
+Public demo tasks are excluded from hidden official scoring.
 
 ## Task Sources
 
-The public demo split contains standalone Modelica tasks only. The hidden official set is broader and includes standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM.
+The public demo split contains standalone Modelica tasks only. Hidden official sets are broader and include standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM.
 
 ## Difficulty Buckets
 
@@ -44,21 +49,9 @@ Difficulty is assigned by empirical agent performance and workflow complexity, n
 
 | bucket | intended meaning |
 | --- | --- |
-| easy | Localized repair and basic OpenModelica workflow completion. |
+| easy | Basic task parsing and OpenModelica workflow completion. |
 | medium | Requires more Modelica context, cross-equation consistency, or nontrivial parameter/interface reasoning. |
 | hard | Requires deeper workflow search, larger model context, library interaction, simulation-stage debugging, or robust finalization behavior. |
-
-## Hidden Official Set
-
-The hidden v0.1 set contains 132 tasks:
-
-| bucket | count |
-| --- | ---: |
-| easy | 21 |
-| medium | 56 |
-| hard | 55 |
-
-The hidden set includes Modelica Standard Library, public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM, and standalone Modelica examples. Full task contents are not public.
 
 ## Non-Goals
 

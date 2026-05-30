@@ -1,8 +1,8 @@
 # Submission Spec
 
-This document describes the public submission interfaces for the Modelica Agent Workflow Benchmark v0.1 Preview.
+This document describes the public submission interfaces for the Modelica Agent Workflow Benchmark v0.2 Preview.
 
-The official hidden set is evaluated in a controlled environment. Participants do not receive hidden tasks or hidden-set keys. The evaluator gives an agent one task at a time and scores the submitted final Modelica model with OpenModelica.
+Official hidden sets are evaluated in a controlled environment. Participants do not receive hidden tasks or hidden-set keys. The evaluator gives an agent one task at a time and scores the submitted final Modelica model with OpenModelica.
 
 ## Evaluation Modes
 
@@ -14,12 +14,18 @@ The official hidden set is evaluated in a controlled environment. Participants d
 
 Official leaderboard-style evaluation should use `agent_command` or `agent_docker_image`. `prediction_jsonl` is mainly useful for reproducibility checks and controlled comparisons.
 
+## Task Inputs
+
+Repair tasks include `initial_model`, a faulty complete Modelica model to repair. Generation tasks include `requirements`, a list of public requirements for a new complete Modelica model. Both task types include `model_name`, `workflow_goal`, `verification`, and `acceptance`.
+
 ## Prediction JSONL
 
 Each line is one JSON object:
 
 ```json
-{"task_id": "demo_001", "final_model": "model ThermalZone_v0\n  ...\nend ThermalZone_v0;"}
+{"task_id": "demo_gen_001", "final_model": "model WorkflowV02_GenRCCharge
+  ...
+end WorkflowV02_GenRCCharge;"}
 ```
 
 Required fields:
@@ -31,12 +37,13 @@ Optional compatibility fields:
 
 - `case_id` or `id` may be accepted as task id aliases.
 - `model_text` may be accepted as a `final_model` alias.
+- `model_name` may be included for readability.
 
 ## Agent Command
 
 The evaluator runs the command in a fresh workspace for each task. The command receives the current task and writes a submission file.
 
-The task JSON contains only the agent-visible task fields: task id, workflow goal, model name, initial model, verification settings, and optional constraints/acceptance notes. It does not include hidden-set provenance, source metadata, construction metadata, or other private evaluator fields.
+The task JSON contains only the agent-visible task fields. It does not include hidden-set provenance, source metadata, construction metadata, private evaluator fields, or hidden scoring keys.
 
 Environment variables:
 
@@ -59,13 +66,7 @@ The command working directory is the case-local workspace. If the command refere
 For containerized agents, the evaluator runs the image with only the current case workspace mounted:
 
 ```text
-docker run --rm \
-  -v <case_workspace>:/workspace \
-  -w /workspace \
-  -e MODELICA_BENCHMARK_TASK_JSON=/workspace/task.json \
-  -e MODELICA_BENCHMARK_SUBMISSION_JSON=/workspace/submission.json \
-  -e MODELICA_BENCHMARK_WORKSPACE=/workspace \
-  <agent_image> <optional_command>
+docker run --rm   -v <case_workspace>:/workspace   -w /workspace   -e MODELICA_BENCHMARK_TASK_JSON=/workspace/task.json   -e MODELICA_BENCHMARK_SUBMISSION_JSON=/workspace/submission.json   -e MODELICA_BENCHMARK_WORKSPACE=/workspace   <agent_image> <optional_command>
 ```
 
 The container must write `/workspace/submission.json`.
@@ -95,7 +96,7 @@ A submission is accepted only when the final model:
 2. declares the expected top-level model;
 3. passes OpenModelica `checkModel`;
 4. reaches an accepted simulation status under the task settings;
-5. preserves the public model interface unless a change is required for validity.
+5. satisfies the public repair interface or generation requirements.
 
 See `benchmark/scoring.md` for the simulation warning policy and failure-stage definitions.
 

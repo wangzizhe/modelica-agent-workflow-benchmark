@@ -1,0 +1,33 @@
+{
+  "task_id": "demo_gen_002",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.2-preview",
+  "split": "public_demo",
+  "task_type": "model_generation",
+  "difficulty": "medium",
+  "model_name": "WorkflowV02_MediumGenThermalChain",
+  "workflow_goal": "Generate a standalone two-node thermal chain Modelica model.",
+  "requirements": [
+    "Use only built-in Real declarations; do not import or reference external Modelica libraries.",
+    "Build a two-node thermal chain with both nodes initially at 293.15 K.",
+    "A 333.15 K heat source drives node A through conductance 0.6, and node A exchanges heat with node B through conductance 0.25.",
+    "Use heat capacities 120 for node A and 180 for node B.",
+    "Represent both thermal nodes as dynamic states and expose simulation result variables named nodeATemperature, nodeBTemperature, and temperatureDifference.",
+    "The model should be executable as a settling transient in OpenModelica."
+  ],
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 900,
+      "stop_time": 900.0
+    }
+  },
+  "acceptance": [
+    "The final model must be complete Modelica source code.",
+    "The final model must declare the exact top-level model name WorkflowV02_MediumGenThermalChain.",
+    "OpenModelica checkModel(model_name) must pass.",
+    "OpenModelica simulate(model_name) must reach an accepted simulation status with the specified stop_time, intervals, and warning policy.",
+    "The requested observable variables nodeATemperature, nodeBTemperature, and temperatureDifference must appear in the generated model."
+  ]
+}

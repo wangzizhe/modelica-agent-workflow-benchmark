@@ -1,9 +1,9 @@
 {
   "task_id": "demo_004",
   "benchmark": "Modelica Agent Workflow Benchmark",
-  "benchmark_version": "v0.1-preview",
+  "benchmark_version": "v0.2-preview",
   "split": "public_demo",
-  "task_type": "modelica_repair",
+  "task_type": "model_repair",
   "difficulty": "medium",
   "model_name": "HydroTurbineGov_v0",
   "workflow_goal": "Repair this Modelica model so that it passes OpenModelica checkModel and simulation while preserving the declared public model interface.",

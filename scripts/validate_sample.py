@@ -5,7 +5,7 @@ import json
 import sys
 from pathlib import Path
 
-REQUIRED = {
+BASE_REQUIRED = {
     "task_id",
     "benchmark",
     "benchmark_version",
@@ -14,7 +14,6 @@ REQUIRED = {
     "difficulty",
     "model_name",
     "workflow_goal",
-    "initial_model",
     "verification",
     "acceptance",
 }
@@ -26,24 +25,42 @@ def validate(path: Path) -> list[str]:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         return [f"{path}: invalid JSON: {exc}"]
-    missing = sorted(REQUIRED - set(data))
+
+    missing = sorted(BASE_REQUIRED - set(data))
     if missing:
         errors.append(f"{path}: missing keys: {', '.join(missing)}")
+
+    task_type = data.get("task_type")
+    if task_type == "model_repair":
+        if "initial_model" not in data:
+            errors.append(f"{path}: model_repair requires initial_model")
+        if "requirements" in data:
+            errors.append(f"{path}: model_repair should not include requirements")
+        if "model " not in str(data.get("initial_model") or ""):
+            errors.append(f"{path}: initial_model does not look like Modelica source")
+    elif task_type == "model_generation":
+        requirements = data.get("requirements")
+        if not isinstance(requirements, list) or not requirements:
+            errors.append(f"{path}: model_generation requires non-empty requirements")
+        if "initial_model" in data:
+            errors.append(f"{path}: model_generation should not include initial_model")
+    else:
+        errors.append(f"{path}: unsupported task_type")
+
     if data.get("benchmark") != "Modelica Agent Workflow Benchmark":
         errors.append(f"{path}: benchmark must be Modelica Agent Workflow Benchmark")
     if data.get("split") != "public_demo":
         errors.append(f"{path}: public samples must use split=public_demo")
-    if data.get("task_type") != "modelica_repair":
-        errors.append(f"{path}: unsupported task_type")
     if data.get("difficulty") not in {"easy", "medium", "hard"}:
         errors.append(f"{path}: invalid difficulty")
     if not str(data.get("model_name") or "").strip():
         errors.append(f"{path}: empty model_name")
-    if "model " not in str(data.get("initial_model") or ""):
-        errors.append(f"{path}: initial_model does not look like Modelica source")
+
     verification = data.get("verification") or {}
     if verification.get("tool") != "OpenModelica":
         errors.append(f"{path}: verification.tool must be OpenModelica")
+    if verification.get("check_model") is not True:
+        errors.append(f"{path}: verification.check_model must be true")
     simulate = verification.get("simulate") or {}
     if "stop_time" not in simulate or "intervals" not in simulate:
         errors.append(f"{path}: verification.simulate requires stop_time and intervals")

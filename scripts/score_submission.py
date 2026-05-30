@@ -15,14 +15,17 @@ def main(argv: list[str]) -> int:
     task = json.loads(task_path.read_text(encoding="utf-8"))
     submission = json.loads(submission_path.read_text(encoding="utf-8"))
     errors: list[str] = []
-    if submission.get("task_id") != task.get("task_id"):
+
+    if submission.get("task_id") and submission.get("task_id") != task.get("task_id"):
         errors.append("task_id mismatch")
-    if submission.get("model_name") != task.get("model_name"):
+    if submission.get("model_name") and submission.get("model_name") != task.get("model_name"):
         errors.append("model_name mismatch")
-    final_model = str(submission.get("final_model") or "")
+
+    final_model = str(submission.get("final_model") or submission.get("model_text") or "")
+    expected_model = str(task.get("model_name") or "")
     if not final_model.strip():
         errors.append("missing final_model")
-    if f"model {task.get('model_name')}" not in final_model:
+    if expected_model and f"model {expected_model}" not in final_model:
         errors.append("final_model does not declare the expected top-level model")
     if errors:
         print(json.dumps({"status": "REVIEW", "errors": errors}, indent=2))

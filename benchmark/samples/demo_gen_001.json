@@ -1,0 +1,32 @@
+{
+  "task_id": "demo_gen_001",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.2-preview",
+  "split": "public_demo",
+  "task_type": "model_generation",
+  "difficulty": "easy",
+  "model_name": "WorkflowV02_GenRCCharge",
+  "workflow_goal": "Generate a standalone first-order RC charging Modelica model.",
+  "requirements": [
+    "Use only built-in Real declarations; do not import or reference external Modelica libraries.",
+    "Build a first-order RC charging transient driven by a 10 V source through a 1000 ohm resistor into a 1e-4 F capacitor.",
+    "The capacitor starts uncharged and should evolve dynamically from the source/resistor/capacitor relationship.",
+    "Expose the capacitor voltage as a simulation result variable named vc.",
+    "The model should be executable as a short transient simulation in OpenModelica."
+  ],
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 250,
+      "stop_time": 0.5
+    }
+  },
+  "acceptance": [
+    "The final model must be complete Modelica source code.",
+    "The final model must declare the exact top-level model name WorkflowV02_GenRCCharge.",
+    "OpenModelica checkModel(model_name) must pass.",
+    "OpenModelica simulate(model_name) must reach an accepted simulation status with the specified stop_time, intervals, and warning policy.",
+    "The requested observable variable vc must appear in the generated model."
+  ]
+}

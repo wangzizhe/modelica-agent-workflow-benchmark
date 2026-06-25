@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Modelica Agent Workflow Benchmark evaluates AI agents on executable Modelica engineering workflows. The v0.2 Preview covers both repair-style tasks and generation-style tasks.
+The Modelica Agent Workflow Benchmark evaluates AI agents on executable Modelica engineering workflows. The v0.2 Preview covers repair-style, generation-style, and tuning-style tasks.
 
 ## Workflow Families
 
@@ -10,12 +10,13 @@ The Modelica Agent Workflow Benchmark evaluates AI agents on executable Modelica
 | --- | --- | --- |
 | Model Repair | a faulty complete Modelica model | a repaired complete Modelica model |
 | Model Generation | requirements for a new Modelica model | a generated complete Modelica model |
+| Model Tuning | a complete Modelica model, tunable parameters, and behavior targets | a parameter set and short tuning report |
 
 ## Evaluation Object
 
-Each task contains a workflow goal, a target top-level model name, OpenModelica verification settings, and either an `initial_model` for repair tasks or `requirements` for generation tasks.
+Each task contains a workflow goal, a target top-level model name, and OpenModelica verification settings. Repair tasks include an `initial_model`; generation tasks include `requirements`; tuning tasks include an `initial_model`, `tunable_parameters`, and public behavior targets.
 
-A valid solution is a complete final Modelica model that passes OpenModelica checkModel and reaches an accepted simulation status under the task settings.
+A valid repair or generation solution is a complete final Modelica model that passes OpenModelica checkModel and reaches an accepted simulation status under the task settings. A valid tuning solution is a parameter set that keeps the model executable and satisfies the task behavior targets.
 
 ## Simulation Warning Policy
 

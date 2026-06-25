@@ -1,0 +1,56 @@
+{
+  "task_id": "demo_tuning_001",
+  "benchmark": "Modelica Agent Workflow Benchmark",
+  "benchmark_version": "v0.2-preview",
+  "split": "public_demo",
+  "task_type": "model_tuning",
+  "difficulty": "easy",
+  "model_name": "WorkflowV02_TuneRLDemo",
+  "workflow_goal": "Tune the resistance parameter so the standalone RL step model matches the public current targets.",
+  "initial_model": "model WorkflowV02_TuneRLDemo\n  parameter Real resistance(min=0.5, max=5.0) = 1.0;\n  parameter Real sourceVoltage = 10.0;\n  parameter Real inductance = 0.5;\n  Real current(start=0.0, fixed=true);\nequation\n  inductance * der(current) + resistance * current = sourceVoltage;\n  annotation(experiment(StartTime=0, StopTime=0.6, Interval=0.01, Tolerance=1e-6));\nend WorkflowV02_TuneRLDemo;\n",
+  "tunable_parameters": [
+    "resistance"
+  ],
+  "parameter_ranges": {
+    "resistance": {
+      "min": 0.5,
+      "max": 5.0
+    }
+  },
+  "target_metrics": [
+    {
+      "type": "value_at_time",
+      "variable": "current",
+      "time": 0.2,
+      "target": 2.52848,
+      "tolerance": 0.04
+    },
+    {
+      "type": "value_at_time",
+      "variable": "current",
+      "time": 0.6,
+      "target": 3.80085,
+      "tolerance": 0.04
+    },
+    {
+      "type": "monotonic",
+      "variable": "current",
+      "direction": "increasing"
+    }
+  ],
+  "verification": {
+    "tool": "OpenModelica",
+    "check_model": true,
+    "simulate": {
+      "intervals": 250,
+      "stop_time": 0.6
+    }
+  },
+  "acceptance": [
+    "The submission must provide a JSON parameter_set containing the tunable parameter resistance.",
+    "The submitted resistance value must stay within the public parameter range.",
+    "The tuned model must pass OpenModelica checkModel(model_name).",
+    "OpenModelica simulate(model_name) must reach an accepted simulation status with the specified stop_time, intervals, and warning policy.",
+    "The current response must satisfy the public target_metrics."
+  ]
+}

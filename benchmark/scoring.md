@@ -10,6 +10,8 @@ A task is scored as PASS when the submitted final Modelica model satisfies all o
 
 For Model Repair tasks, the final model should preserve the public model interface unless a change is required to make the model valid. For Model Generation tasks, the final model should declare the requested top-level model and implement the public requirements in the task JSON.
 
+For Model Tuning tasks, the submitted `parameter_set` must contain allowed tunable parameters, respect public ranges when provided, keep the model executable, and satisfy the task behavior metrics under OpenModelica simulation. Official hidden tuning tasks may include hidden validation scenarios in addition to public visible targets.
+
 ## Simulation Warning Policy
 
 A simulation is accepted as PASS when it completes cleanly. A warning status is accepted as `warning_pass` only when OpenModelica produces a non-empty result file and reports successful simulation completion.
@@ -37,7 +39,7 @@ Submission formats are documented in `benchmark/submission.md`. Official evaluat
 
 ```json
 {
-  "task_id": "demo_gen_001",
+  "task_id": "demo_generation_001",
   "model_name": "WorkflowV02_GenRCCharge",
   "final_model": "model WorkflowV02_GenRCCharge
   ...
@@ -46,3 +48,16 @@ end WorkflowV02_GenRCCharge;"
 ```
 
 The final model must be self-contained for standalone demo tasks.
+
+For tuning tasks, submissions use a parameter-set format:
+
+```json
+{
+  "task_id": "demo_tuning_001",
+  "model_name": "WorkflowV02_TuneRLDemo",
+  "parameter_set": {
+    "resistance": 2.5
+  },
+  "final_report": "Short tuning rationale."
+}
+```

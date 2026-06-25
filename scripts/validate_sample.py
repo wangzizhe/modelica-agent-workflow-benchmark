@@ -44,6 +44,19 @@ def validate(path: Path) -> list[str]:
             errors.append(f"{path}: model_generation requires non-empty requirements")
         if "initial_model" in data:
             errors.append(f"{path}: model_generation should not include initial_model")
+    elif task_type == "model_tuning":
+        if "initial_model" not in data:
+            errors.append(f"{path}: model_tuning requires initial_model")
+        if "requirements" in data:
+            errors.append(f"{path}: model_tuning should not include requirements")
+        if "model " not in str(data.get("initial_model") or ""):
+            errors.append(f"{path}: initial_model does not look like Modelica source")
+        tunable_parameters = data.get("tunable_parameters")
+        if not isinstance(tunable_parameters, list) or not tunable_parameters:
+            errors.append(f"{path}: model_tuning requires non-empty tunable_parameters")
+        target_metrics = data.get("target_metrics")
+        if not isinstance(target_metrics, list) or not target_metrics:
+            errors.append(f"{path}: model_tuning requires non-empty target_metrics")
     else:
         errors.append(f"{path}: unsupported task_type")
 

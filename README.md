@@ -4,7 +4,7 @@
 
 This repository contains the public protocol, schema, scoring notes, and demo tasks for the Modelica Agent Workflow Benchmark v0.2 Preview.
 
-The benchmark evaluates whether an AI agent can work through a Modelica engineering task end to end: inspect task requirements, edit or generate Modelica source, run OpenModelica feedback, and submit a final model that passes executable validation.
+The benchmark evaluates whether an AI agent can work through a Modelica engineering task end to end: inspect task requirements, edit, generate, or tune Modelica artifacts, run OpenModelica feedback, and submit a final answer that passes executable validation.
 
 The official evaluation sets are hidden and maintainer-run to reduce benchmark contamination. Public files in this repository document the task format and provide a small demo split for local smoke testing. Public demo tasks are excluded from hidden official scoring.
 
@@ -14,22 +14,24 @@ The official evaluation sets are hidden and maintainer-run to reduce benchmark c
 | --- | --- | --- |
 | Model Repair | a faulty complete Modelica model | a repaired complete Modelica model |
 | Model Generation | requirements for a new Modelica model | a generated complete Modelica model |
+| Model Tuning | a complete Modelica model, tunable parameters, and behavior targets | a parameter set and short tuning report |
 
 ## What a Task Looks Like
 
 Each task JSON contains:
 
 - `workflow_goal`: what the agent should accomplish;
-- `task_type`: `model_repair` or `model_generation`;
+- `task_type`: `model_repair`, `model_generation`, or `model_tuning`;
 - `model_name`: the expected top-level Modelica model name;
 - `initial_model`: the faulty source for repair tasks;
 - `requirements`: the model requirements for generation tasks;
+- `tunable_parameters` and `target_metrics`: the public tuning interface for tuning tasks;
 - `verification`: OpenModelica check/simulation settings;
 - `acceptance`: high-level acceptance rules.
 
-The canonical demo task files live in `benchmark/samples/*.json`. Repair demo initial models are also mirrored as `.mo` files in `benchmark/samples/modelica/` for easier reading.
+The canonical demo task files live in `benchmark/samples/*.json`. Repair demo initial models are also mirrored as `.mo` files in `benchmark/samples/modelica_models/` for easier reading.
 
-A valid submission is a complete final Modelica model that passes OpenModelica `checkModel` and reaches an accepted simulation status under the task settings.
+A valid repair or generation submission is a complete final Modelica model that passes OpenModelica `checkModel` and reaches an accepted simulation status under the task settings. A valid tuning submission is a parameter set that keeps the model executable and satisfies the task behavior targets under the same OpenModelica validation policy.
 
 ## Simulation Warning Policy
 
@@ -59,11 +61,11 @@ Difficulty is assigned by empirical agent performance and workflow complexity, n
 | medium | Requires more Modelica context, cross-equation consistency, or nontrivial parameter/interface reasoning. |
 | hard | Requires deeper workflow search, larger model context, library interaction, simulation-stage debugging, or robust finalization behavior. |
 
-The public demo split includes repair and generation examples. Hard tasks are kept in hidden official evaluation to preserve benchmark value.
+The public demo split includes repair, generation, and tuning examples. Hard tasks are kept in hidden official evaluation to preserve benchmark value.
 
 ## Benchmark Snapshot
 
-*Benchmark snapshot as of May 29, 2026.*
+*Benchmark snapshot as of June 26, 2026.*
 
 All agents use the same foundation model family and are evaluated under the same benchmark and wall-clock conditions. Public demo tasks are excluded from hidden official scoring after release.
 
@@ -103,6 +105,24 @@ GateForge leads the generation benchmark while using fewer reported tokens and l
 | Claude Code | ~1.57M | ~4,474s |
 | OpenCode | ~9.81M | ~3,693s |
 
+### Model Tuning
+
+All agents were evaluated on the same 43-task private tuning benchmark snapshot.
+
+| Agent | Total | easy | medium | hard |
+| --- | ---: | ---: | ---: | ---: |
+| GateForge | 35/43 | 4/4 | 24/24 | 7/15 |
+| Claude Code | 33/43 | 4/4 | 24/24 | 5/15 |
+| OpenCode | 33/43 | 4/4 | 23/24 | 6/15 |
+
+GateForge leads the tuning benchmark overall, with the main separation on harder physical-system tuning tasks.
+
+| Agent | reported tokens* | wall time |
+| --- | ---: | ---: |
+| GateForge | ~19.1M | ~7,348s |
+| Claude Code | ~3.91M | ~13,135s |
+| OpenCode | ~40.1M | ~12,457s |
+
 *Reported tokens are runner-reported estimates. GateForge records provider usage directly, while other runners may include or omit local context management, compression, retries, and tool-output handling costs.
 
 ## Evaluation Isolation
@@ -113,12 +133,13 @@ Official evaluation runs each task in a fresh agent session and isolated workspa
 
 | task | type | difficulty | dependency | model | task JSON | readable model |
 | --- | --- | --- | --- | --- | --- | --- |
-| `demo_001` | Model Repair | easy | standalone | `ThermalZone_v0` | `benchmark/samples/demo_001.json` | `benchmark/samples/modelica/demo_001_initial.mo` |
-| `demo_002` | Model Repair | easy | standalone | `ExciterAVR_v0` | `benchmark/samples/demo_002.json` | `benchmark/samples/modelica/demo_002_initial.mo` |
-| `demo_003` | Model Repair | medium | standalone | `SyncMachineSimplified_v0` | `benchmark/samples/demo_003.json` | `benchmark/samples/modelica/demo_003_initial.mo` |
-| `demo_004` | Model Repair | medium | standalone | `HydroTurbineGov_v0` | `benchmark/samples/demo_004.json` | `benchmark/samples/modelica/demo_004_initial.mo` |
-| `demo_gen_001` | Model Generation | easy | standalone | `WorkflowV02_GenRCCharge` | `benchmark/samples/demo_gen_001.json` | n/a |
-| `demo_gen_002` | Model Generation | medium | standalone | `WorkflowV02_MediumGenThermalChain` | `benchmark/samples/demo_gen_002.json` | n/a |
+| `demo_repair_001` | Model Repair | easy | standalone | `ThermalZone_v0` | `benchmark/samples/demo_repair_001.json` | `benchmark/samples/modelica_models/demo_repair_001_initial.mo` |
+| `demo_repair_002` | Model Repair | easy | standalone | `ExciterAVR_v0` | `benchmark/samples/demo_repair_002.json` | `benchmark/samples/modelica_models/demo_repair_002_initial.mo` |
+| `demo_repair_003` | Model Repair | medium | standalone | `SyncMachineSimplified_v0` | `benchmark/samples/demo_repair_003.json` | `benchmark/samples/modelica_models/demo_repair_003_initial.mo` |
+| `demo_repair_004` | Model Repair | medium | standalone | `HydroTurbineGov_v0` | `benchmark/samples/demo_repair_004.json` | `benchmark/samples/modelica_models/demo_repair_004_initial.mo` |
+| `demo_generation_001` | Model Generation | easy | standalone | `WorkflowV02_GenRCCharge` | `benchmark/samples/demo_generation_001.json` | n/a |
+| `demo_generation_002` | Model Generation | medium | standalone | `WorkflowV02_MediumGenThermalChain` | `benchmark/samples/demo_generation_002.json` | n/a |
+| `demo_tuning_001` | Model Tuning | easy | standalone | `WorkflowV02_TuneRLDemo` | `benchmark/samples/demo_tuning_001.json` | `benchmark/samples/modelica_models/demo_tuning_001_initial.mo` |
 
 These demo tasks are not intended to be a leaderboard. They exist to document the task format and let users validate their tooling.
 
@@ -131,17 +152,19 @@ benchmark/
   scoring.md
   submission.md
   samples/
-    demo_001.json
-    demo_002.json
-    demo_003.json
-    demo_004.json
-    demo_gen_001.json
-    demo_gen_002.json
-    modelica/
-      demo_001_initial.mo
-      demo_002_initial.mo
-      demo_003_initial.mo
-      demo_004_initial.mo
+    demo_repair_001.json
+    demo_repair_002.json
+    demo_repair_003.json
+    demo_repair_004.json
+    demo_generation_001.json
+    demo_generation_002.json
+    demo_tuning_001.json
+    modelica_models/
+      demo_repair_001_initial.mo
+      demo_repair_002_initial.mo
+      demo_repair_003_initial.mo
+      demo_repair_004_initial.mo
+      demo_tuning_001_initial.mo
 scripts/
   validate_sample.py
   score_submission.py
@@ -152,14 +175,14 @@ scripts/
 Validate public sample files:
 
 ```bash
-python3 scripts/validate_sample.py benchmark/samples/demo_001.json
+python3 scripts/validate_sample.py benchmark/samples/demo_repair_001.json
 python3 scripts/validate_sample.py benchmark/samples/*.json
 ```
 
 Validate a submission JSON against a task JSON:
 
 ```bash
-python3 scripts/score_submission.py benchmark/samples/demo_gen_001.json path/to/submission.json
+python3 scripts/score_submission.py benchmark/samples/demo_generation_001.json path/to/submission.json
 ```
 
 The scoring script checks schema-level requirements only. Official scoring runs OpenModelica checkModel and simulation using the task verification settings and warning policy.

@@ -35,7 +35,8 @@
     "task_type": {
       "enum": [
         "model_repair",
-        "model_generation"
+        "model_generation",
+        "model_tuning"
       ]
     },
     "difficulty": {
@@ -58,6 +59,39 @@
       "type": "array",
       "items": {
         "type": "string"
+      },
+      "minItems": 1
+    },
+    "tunable_parameters": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "parameter_ranges": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "min",
+          "max"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "target_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object"
       },
       "minItems": 1
     },
@@ -144,6 +178,30 @@
         "not": {
           "required": [
             "initial_model"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "task_type": {
+            "const": "model_tuning"
+          }
+        },
+        "required": [
+          "task_type"
+        ]
+      },
+      "then": {
+        "required": [
+          "initial_model",
+          "tunable_parameters",
+          "target_metrics"
+        ],
+        "not": {
+          "required": [
+            "requirements"
           ]
         }
       }

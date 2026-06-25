@@ -1,5 +1,5 @@
 {
-  "task_id": "demo_gen_001",
+  "task_id": "demo_generation_001",
   "benchmark": "Modelica Agent Workflow Benchmark",
   "benchmark_version": "v0.2-preview",
   "split": "public_demo",

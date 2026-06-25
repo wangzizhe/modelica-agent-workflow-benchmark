@@ -2,7 +2,7 @@
 
 This document describes the public submission interfaces for the Modelica Agent Workflow Benchmark v0.2 Preview.
 
-Official hidden sets are evaluated in a controlled environment. Participants do not receive hidden tasks or hidden-set keys. The evaluator gives an agent one task at a time and scores the submitted final Modelica model with OpenModelica.
+Official hidden sets are evaluated in a controlled environment. Participants do not receive hidden tasks or hidden-set keys. The evaluator gives an agent one task at a time and scores the submitted final model or parameter set with OpenModelica.
 
 ## Evaluation Modes
 
@@ -16,14 +16,14 @@ Official leaderboard-style evaluation should use `agent_command` or `agent_docke
 
 ## Task Inputs
 
-Repair tasks include `initial_model`, a faulty complete Modelica model to repair. Generation tasks include `requirements`, a list of public requirements for a new complete Modelica model. Both task types include `model_name`, `workflow_goal`, `verification`, and `acceptance`.
+Repair tasks include `initial_model`, a faulty complete Modelica model to repair. Generation tasks include `requirements`, a list of public requirements for a new complete Modelica model. Tuning tasks include `initial_model`, `tunable_parameters`, optional public parameter ranges, and public behavior targets. All task types include `model_name`, `workflow_goal`, `verification`, and `acceptance`.
 
 ## Prediction JSONL
 
 Each line is one JSON object:
 
 ```json
-{"task_id": "demo_gen_001", "final_model": "model WorkflowV02_GenRCCharge
+{"task_id": "demo_generation_001", "final_model": "model WorkflowV02_GenRCCharge
   ...
 end WorkflowV02_GenRCCharge;"}
 ```
@@ -31,13 +31,19 @@ end WorkflowV02_GenRCCharge;"}
 Required fields:
 
 - `task_id`: task identifier provided by the evaluator.
-- `final_model`: complete final Modelica source code.
+- `final_model`: complete final Modelica source code for repair and generation tasks.
 
 Optional compatibility fields:
 
 - `case_id` or `id` may be accepted as task id aliases.
 - `model_text` may be accepted as a `final_model` alias.
 - `model_name` may be included for readability.
+
+For tuning tasks, each line should instead include a parameter set:
+
+```json
+{"task_id": "demo_tuning_001", "parameter_set": {"resistance": 2.5}, "final_report": "Short tuning rationale."}
+```
 
 ## Agent Command
 
@@ -57,6 +63,12 @@ The submission file must contain:
 
 ```json
 {"final_model": "model ... end ...;"}
+```
+
+For tuning tasks, the submission file must contain:
+
+```json
+{"parameter_set": {"parameterName": 1.23}, "final_report": "Short tuning rationale."}
 ```
 
 The command working directory is the case-local workspace. If the command references a script, use an absolute path or a command available on `PATH`.
@@ -90,13 +102,20 @@ Read-only infrastructure caches may be reused only when they do not contain task
 
 ## Scoring
 
-A submission is accepted only when the final model:
+A repair or generation submission is accepted only when the final model:
 
 1. is complete Modelica source code;
 2. declares the expected top-level model;
 3. passes OpenModelica `checkModel`;
 4. reaches an accepted simulation status under the task settings;
 5. satisfies the public repair interface or generation requirements.
+
+A tuning submission is accepted only when the submitted parameter set:
+
+1. contains only allowed tunable parameters;
+2. respects public parameter ranges when ranges are provided;
+3. keeps the model executable under OpenModelica `checkModel` and simulation;
+4. satisfies the public behavior targets and any hidden official validation targets.
 
 See `benchmark/scoring.md` for the simulation warning policy and failure-stage definitions.
 

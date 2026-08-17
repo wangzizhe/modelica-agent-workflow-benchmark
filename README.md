@@ -65,65 +65,71 @@ The public demo split includes repair, generation, and tuning examples. Hard tas
 
 ## Benchmark Snapshot
 
-*Benchmark snapshot as of June 26, 2026.*
+*Benchmark snapshot as of August 17, 2026.*
 
-All agents use the same foundation model family and are evaluated under the same benchmark and wall-clock conditions. Public demo tasks are excluded from hidden official scoring after release.
+Each comparison uses the same backend model for GateForge and Claude Code. Public demo tasks are excluded from hidden official scoring.
 
-### Model Repair
+### Backend: DeepSeek v4 Flash
 
-All agents were evaluated on the same 132-task hidden repair set.
+#### Model Repair
 
-| Agent | Total | easy | medium | hard |
-| --- | ---: | ---: | ---: | ---: |
-| GateForge | 130/132 | 21/21 | 56/56 | 53/55 |
-| Claude Code | 123/132 | 21/21 | 55/56 | 47/55 |
-| OpenCode | 120/132 | 21/21 | 50/56 | 49/55 |
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **130/132** | **\|** | 21/21 | 56/56 | 53/55 | **\|** | **98.48%** | **\|** | **39.8M** | **4.07h** |
+| Claude Code | **\|** | 124/132 | **\|** | 21/21 | 56/56 | 47/55 | **\|** | 93.94% | **\|** | 227M | 9.78h |
 
-GateForge beats both baselines: executing faster with fewer tokens than OpenCode, and finishing quicker with a higher success rate than Claude Code.
+GateForge vs Claude Code: **Pass rate ↑ 4.8% · Tokens ↓ 82.5% · Runtime ↓ 58.4%**
 
-| Agent | reported tokens* | wall time |
-| --- | ---: | ---: |
-| GateForge | ~39.7M | ~14,658s |
-| Claude Code | ~15.9M | ~35,191s |
-| OpenCode | ~66.1M | ~20,843s |
+#### Model Generation
 
-### Model Generation
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **35/50** | **\|** | 2/2 | 10/10 | 23/38 | **\|** | **70.00%** | **\|** | **17.0M** | **2.34h** |
+| Claude Code | **\|** | 27/50 | **\|** | 2/2 | 10/10 | 15/38 | **\|** | 54.00% | **\|** | 81.1M | 2.49h |
 
-All agents were evaluated on the same 22-task private generation benchmark snapshot.
+GateForge vs Claude Code: **Pass rate ↑ 29.6% · Tokens ↓ 79.0% · Runtime ↓ 6.1%**
 
-| Agent | Total | easy | medium | hard |
-| --- | ---: | ---: | ---: | ---: |
-| GateForge | 21/22 | 2/2 | 10/10 | 9/10 |
-| Claude Code | 19/22 | 2/2 | 10/10 | 7/10 |
-| OpenCode | 18/22 | 2/2 | 10/10 | 6/10 |
+#### Model Tuning
 
-GateForge leads the generation benchmark while using fewer reported tokens and less wall time than both baselines.
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **37/50** | **\|** | 4/4 | 24/24 | 9/22 | **\|** | **74.00%** | **\|** | **22.9M** | **3.56h** |
+| Claude Code | **\|** | 34/50 | **\|** | 4/4 | 23/24 | 7/22 | **\|** | 68.00% | **\|** | 111.6M | 6.96h |
 
-| Agent | reported tokens* | wall time |
-| --- | ---: | ---: |
-| GateForge | ~1.31M | ~1,343s |
-| Claude Code | ~1.57M | ~4,474s |
-| OpenCode | ~9.81M | ~3,693s |
+GateForge vs Claude Code: **Pass rate ↑ 8.8% · Tokens ↓ 79.5% · Runtime ↓ 48.8%**
 
-### Model Tuning
+### Backend: Sonnet 5
 
-All agents were evaluated on the same 43-task private tuning benchmark snapshot.
+#### Model Repair
 
-| Agent | Total | easy | medium | hard |
-| --- | ---: | ---: | ---: | ---: |
-| GateForge | 35/43 | 4/4 | 24/24 | 7/15 |
-| Claude Code | 33/43 | 4/4 | 24/24 | 5/15 |
-| OpenCode | 33/43 | 4/4 | 23/24 | 6/15 |
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **131/132** | **\|** | 21/21 | 56/56 | 54/55 | **\|** | **99.24%** | **\|** | **36.2M** | **3.68h** |
+| Claude Code | **\|** | 125/132 | **\|** | 21/21 | 56/56 | 48/55 | **\|** | 94.70% | **\|** | 177.7M | 8.76h |
 
-GateForge leads the tuning benchmark overall, with the main separation on harder physical-system tuning tasks.
+GateForge vs Claude Code: **Pass rate ↑ 4.8% · Tokens ↓ 79.6% · Runtime ↓ 58.1%**
 
-| Agent | reported tokens* | wall time |
-| --- | ---: | ---: |
-| GateForge | ~19.1M | ~7,348s |
-| Claude Code | ~3.91M | ~13,135s |
-| OpenCode | ~40.1M | ~12,457s |
+#### Model Generation
 
-*Reported tokens are runner-reported estimates. GateForge records provider usage directly, while other runners may include or omit local context management, compression, retries, and tool-output handling costs.
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **32/50** | **\|** | 2/2 | 10/10 | 20/38 | **\|** | **64.00%** | **\|** | **13.6M** | **2.73h** |
+| Claude Code | **\|** | 26/50 | **\|** | 2/2 | 10/10 | 14/38 | **\|** | 52.00% | **\|** | 77.1M | 2.91h |
+
+GateForge vs Claude Code: **Pass rate ↑ 23.1% · Tokens ↓ 82.4% · Runtime ↓ 6.3%**
+
+#### Model Tuning
+
+| Agent | **\|** | Total | **\|** | Easy | Medium | Hard | **\|** | Pass rate | **\|** | Tokens | Runtime |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **GateForge** | **\|** | **39/50** | **\|** | 4/4 | 24/24 | 11/22 | **\|** | **78.00%** | **\|** | **20.5M** | **5.12h** |
+| Claude Code | **\|** | 36/50 | **\|** | 4/4 | 24/24 | 8/22 | **\|** | 72.00% | **\|** | 86.7M | 10.43h |
+
+GateForge vs Claude Code: **Pass rate ↑ 8.3% · Tokens ↓ 76.4% · Runtime ↓ 51.0%**
+
+*Metrics use relative pass-rate improvement, matched logical-token accounting, and sequential runtime excluding infrastructure-only attempts.*
+
+Across these benchmark runs, GateForge's prompt-cache management achieved a **90%–93% cache hit rate**, enabling efficient context reuse across long-running Modelica workflows.
 
 ## Evaluation Isolation
 

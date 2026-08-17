@@ -2,11 +2,13 @@
 
 **An executable benchmark for evaluating AI agents on agentic Modelica workflows.**
 
+[Pufibara](https://github.com/wangzizhe/Pufibara) is an AI agent for physical systems modeling, currently focused on Modelica workflows. This repository provides the executable benchmark used to evaluate Pufibara and other AI agents under a shared protocol.
+
 This repository contains the public protocol, schema, scoring notes, and demo tasks for the Modelica Agent Workflow Benchmark v0.2 Preview.
 
 The benchmark evaluates whether an AI agent can work through a Modelica engineering task end to end: inspect task requirements, edit, generate, or tune Modelica artifacts, run OpenModelica feedback, and submit a final answer that passes executable validation.
 
-The official evaluation sets are hidden and maintainer-run to reduce benchmark contamination. Public files in this repository document the task format and provide a small demo split for local smoke testing. Public demo tasks are excluded from hidden official scoring.
+Official evaluation is maintainer-run on hidden sets to reduce benchmark contamination. This repository documents the task format and provides a small public demo split for local smoke testing.
 
 ## Workflow Families
 
@@ -39,17 +41,21 @@ A clean OpenModelica simulation pass is accepted. A non-fatal warning status is 
 
 Warnings remain FAIL when they correspond to fatal solver errors, missing result files, failed initialization, division by zero, integrator failure, or any simulation output that does not successfully complete.
 
-## Task Sources and Dependencies
+## Evaluation Splits and Access
 
 The public demo split is intentionally small and self-contained. All public demo tasks are standalone Modelica tasks with no external library dependency.
 
-The hidden official sets are broader. They contain standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM. The full hidden task contents and construction metadata are not released.
+The hidden official sets are broader. They contain standalone tasks, Modelica Standard Library based tasks, and tasks derived from public Modelica libraries such as AixLib, Buildings, IBPSA, OpenIPSL, and TRANSFORM.
 
 | split | visibility | dependency types | purpose |
 | --- | --- | --- | --- |
 | `public_demo` | public | standalone only | format inspection and tooling smoke tests |
 | `hidden_official_v0.1` | private | standalone, MSL, public Modelica libraries | official repair evaluation |
 | `hidden_official_v0.2` | private | standalone, MSL, public Modelica libraries | official workflow evaluation |
+
+The public demo split can be run locally for format checks, tooling smoke tests, and submission preparation. It is not an official leaderboard split. For official evaluation, participants may provide a prediction JSONL file, an agent command, or a Docker image following `benchmark/submission.md`. The maintainers run the controlled evaluator and return a public-safe aggregate report.
+
+Hidden tasks, hidden-set keys, evaluator internals, and construction metadata are not distributed. Aggregate results may be published, and public demo tasks are excluded from official scoring.
 
 ## Difficulty Buckets
 
@@ -67,7 +73,7 @@ The public demo split includes repair, generation, and tuning examples. Hard tas
 
 *Benchmark snapshot as of August 17, 2026.*
 
-Each comparison uses the same backend model for Pufibara and Claude Code. Public demo tasks are excluded from hidden official scoring.
+Each comparison uses the same backend model for Pufibara and Claude Code.
 
 ### Backend: DeepSeek v4 Flash
 
@@ -203,22 +209,6 @@ The benchmark supports three public submission interfaces:
 
 See `benchmark/submission.md` for the full submission spec.
 
-## Official Evaluation Access
-
-The public demo split can be run locally for format checks, tooling smoke tests, and submission preparation. It is not an official leaderboard split.
-
-For official evaluation, participants may provide a prediction JSONL file, an agent command, or a Docker image following `benchmark/submission.md`. The maintainers run the controlled evaluator and return a public-safe aggregate report.
-
-The hidden tasks, hidden-set keys, and evaluator backend are not distributed. This protects the benchmark from leakage and training-data contamination.
-
-## Hidden Evaluation Policy
-
-Hidden official sets are kept private. Aggregate results may be published, but hidden task contents and construction metadata are not released. Public demo tasks are excluded from hidden official scoring.
-
 ## License
 
-Code, scripts, schemas, and tooling are licensed under the Apache License 2.0. Benchmark task data and task content are governed by `DATA_LICENSE.md` and may not be used for model training, fine-tuning, distillation, dataset augmentation, or benchmark memorization without prior written permission.
-
-## Data Use Notice
-
-The public demo tasks are provided for benchmark format inspection and local smoke testing. They are not intended for training or benchmark memorization.
+Code, scripts, schemas, and tooling are licensed under the Apache License 2.0. Benchmark task data, including the public demo tasks, are governed by `DATA_LICENSE.md`. The demos are provided for format inspection and local smoke testing; benchmark task data may not be used for model training, fine-tuning, distillation, dataset augmentation, or benchmark memorization without prior written permission.

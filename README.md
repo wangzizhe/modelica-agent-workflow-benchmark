@@ -122,10 +122,10 @@ Pufibara vs Claude Code: **Pass rate ↑ 23.1% · Tokens ↓ 82.4% · Runtime �
 
 | Agent | Total | Easy | Medium | Hard | Pass rate | Tokens | Runtime |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Pufibara** | **39/50** | 4/4 | 24/24 | 11/22 | **78.00%** | **20.5M** | **5.12h** |
-| Claude Code | 36/50 | 4/4 | 24/24 | 8/22 | 72.00% | 86.7M | 10.43h |
+| **Pufibara** | **39/50** | 4/4 | 24/24 | 11/22 | **78.00%** | **20.5M** | **3.17h** |
+| Claude Code | 36/50 | 4/4 | 24/24 | 8/22 | 72.00% | 86.7M | 6.15h |
 
-Pufibara vs Claude Code: **Pass rate ↑ 8.3% · Tokens ↓ 76.4% · Runtime ↓ 51.0%**
+Pufibara vs Claude Code: **Pass rate ↑ 8.3% · Tokens ↓ 76.4% · Runtime ↓ 48.4%**
 
 *Metrics use relative pass-rate improvement, matched logical-token accounting, and sequential runtime excluding infrastructure-only attempts.*
 

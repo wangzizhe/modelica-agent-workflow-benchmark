@@ -6,7 +6,7 @@
 
 This repository contains the public protocol, schema, scoring notes, and demo tasks for the Modelica Agent Workflow Benchmark v0.2 Preview.
 
-The benchmark evaluates whether an AI agent can work through a Modelica engineering task end to end: inspect task requirements, edit, generate, or tune Modelica artifacts, run OpenModelica feedback, and submit a final answer that passes executable validation.
+The benchmark evaluates whether an AI agent can complete a Modelica engineering task end to end: interpret requirements, create or revise Modelica artifacts, use OpenModelica feedback, and submit a final answer that satisfies the applicable executable and behavioral checks.
 
 Official evaluation is maintainer-run on hidden sets to reduce benchmark contamination. This repository documents the task format and provides a small public demo split for local smoke testing.
 
@@ -33,7 +33,7 @@ Each task JSON contains:
 
 The canonical demo task files live in `benchmark/samples/*.json`. Repair demo initial models are also mirrored as `.mo` files in `benchmark/samples/modelica_models/` for easier reading.
 
-A valid repair or generation submission is a complete final Modelica model that passes OpenModelica `checkModel` and reaches an accepted simulation status under the task settings. A valid tuning submission is a parameter set that keeps the model executable and satisfies the task behavior targets under the same OpenModelica validation policy.
+A valid Repair submission must preserve the required interface and pass OpenModelica model checking and simulation. A valid Generation submission must additionally satisfy its structural and behavioral contracts. A valid Tuning submission must keep the model executable and satisfy its scenario-dependent behavior targets.
 
 ## Simulation Warning Policy
 

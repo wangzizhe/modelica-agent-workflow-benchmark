@@ -212,3 +212,14 @@ See `benchmark/submission.md` for the full submission spec.
 ## License
 
 Code, scripts, schemas, and tooling are licensed under the Apache License 2.0. Benchmark task data, including the public demo tasks, are governed by `DATA_LICENSE.md`. The demos are provided for format inspection and local smoke testing; benchmark task data may not be used for model training, fine-tuning, distillation, dataset augmentation, or benchmark memorization without prior written permission.
+
+## Citation
+```
+@article{wang2026pufibara,
+  title   = {Beyond Executable Models: The Pufibara Agent Harness and the Modelica Agent Workflow Benchmark for Physical System Modeling},
+  author  = {Wang, Zizhe},
+  journal = {arXiv preprint arXiv:2608.23653},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2608.23653}
+}
+```

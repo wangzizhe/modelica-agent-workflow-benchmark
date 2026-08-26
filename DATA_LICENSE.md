@@ -1,10 +1,10 @@
 # Benchmark Data License
 
-This license applies to benchmark task data and task content in this repository, including:
+This license applies to the public benchmark task data and task content under:
 
 - `benchmark/samples/`
-- benchmark task prompts, Modelica task models, acceptance text, and related task metadata
-- any hidden official benchmark set made available separately by the project maintainers
+
+This includes task prompts, Modelica task models, acceptance text, and related task metadata in that directory.
 
 It does not apply to code, scripts, schemas, or tooling, which are licensed under the Apache License 2.0 unless otherwise stated.
 
@@ -24,13 +24,11 @@ Without prior written permission from the copyright holder, you may not use the 
 
 - train, fine-tune, pre-train, continue-train, or instruction-tune AI models;
 - distill, synthesize, augment, or expand model-training datasets;
-- create benchmark-memorization datasets or contaminate hidden evaluation sets;
-- redistribute the benchmark task data at scale or as part of another dataset;
-- use the public demo split as an official leaderboard or as evidence of broad Modelica Agent capability.
+- redistribute the benchmark task data at scale or as part of another dataset.
 
 ## Hidden Evaluation Set
 
-The official hidden evaluation set is not public. Aggregate results may be published by the maintainers, but hidden task contents, construction metadata, and evaluation details are not released.
+The official hidden evaluation sets are not distributed in this repository. If access is provided separately, it is governed by the terms supplied with that access.
 
 ## No Warranty
 

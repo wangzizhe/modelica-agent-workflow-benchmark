@@ -211,7 +211,9 @@ See `benchmark/submission.md` for the full submission spec.
 
 ## License
 
-Code, scripts, schemas, and tooling are licensed under the Apache License 2.0. Benchmark task data, including the public demo tasks, are governed by `DATA_LICENSE.md`. The demos are provided for format inspection and local smoke testing; benchmark task data may not be used for model training, fine-tuning, distillation, dataset augmentation, or benchmark memorization without prior written permission.
+Software components of this repository, including code, scripts, schemas, and tooling, are licensed under the [Apache License 2.0](LICENSE).
+
+Files under `benchmark/samples/` are separately governed by the [Benchmark Data License](DATA_LICENSE.md). They are provided for format inspection and local smoke testing and may not be used to train, fine-tune, or distill AI models, or to construct model-training datasets, without prior written permission.
 
 ## Citation
 ```

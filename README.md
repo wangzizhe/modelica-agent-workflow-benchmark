@@ -1,6 +1,18 @@
 # Modelica Agent Workflow Benchmark
 
-**An executable benchmark for evaluating AI agents on agentic Modelica workflows.**
+<p align="center"><strong>A benchmark for evaluating AI agents on agentic Modelica workflows.</strong></p>
+
+---
+
+<div align="center">
+  <h3>😺 Evaluate Your LLM or Agent 😺</h3>
+  <p>We offer pilot evaluations for LLMs and agents on Modelica workflows.</p>
+  <p>We help teams compare versions under consistent tasks and environments to measure improvements and identify bottlenecks.</p>
+  <p>Evaluations use a private test set. Scope, deliverables, confidentiality arrangements, and fees are agreed upon in advance.</p>
+  <p><strong>Interested in evaluating your LLM or agent? Contact us.</strong></p>
+</div>
+
+---
 
 [Pufibara](https://github.com/wangzizhe/Pufibara) is an AI agent for physical systems modeling, currently focused on Modelica workflows. This repository provides the executable benchmark used to evaluate Pufibara and other AI agents under a shared protocol.
 
